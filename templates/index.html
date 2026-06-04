@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Website Health Checker</title>
+    <style>
+        body { background: #f0f2f5; font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; color: #202124; }
+        .header { background: #1976d2; color: white; padding: 40px 20px; text-align: center; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .header h1 { margin: 0 0 10px 0; font-size: 32px; font-weight: 500; }
+        .header p { margin: 0; font-size: 16px; opacity: 0.9; }
+        .container { width: 90%; max-width: 1000px; margin: -30px auto 40px auto; position: relative; z-index: 10; }
+        
+        .scan-form { display: flex; gap: 15px; margin-bottom: 25px; background: white; padding: 24px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .scan-form input[type="url"] { flex: 1; padding: 16px; border: 1px solid #dadce0; border-radius: 4px; font-size: 16px; outline: none; background: #f8f9fa; }
+        .scan-form input[type="number"] { width: 140px; padding: 16px; border: 1px solid #dadce0; border-radius: 4px; font-size: 16px; outline: none; background: #f8f9fa; }
+        .scan-form input:focus { border-color: #1976d2; background: white; box-shadow: inset 0 0 0 1px #1976d2; }
+        .scan-form button { padding: 16px 32px; border: none; border-radius: 4px; background: #1976d2; color: white; font-size: 16px; font-weight: 500; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
+        .scan-form button:hover { background: #1565c0; }
+
+        /* NEW: Live Stats Dashboard Cards */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; display: none; }
+        .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center; border-bottom: 4px solid #1976d2; }
+        .stat-card.error-card { border-bottom-color: #c5221f; }
+        .stat-label { font-size: 12px; color: #5f6368; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px; }
+        .stat-value { font-size: 32px; font-weight: bold; color: #202124; margin-top: 8px; }
+
+        .table-container { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: none; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #ffffff; color: #5f6368; font-weight: 500; text-transform: uppercase; font-size: 12px; border-bottom: 2px solid #f1f3f4; padding: 18px 24px; text-align: left; }
+        td { padding: 18px 24px; border-bottom: 1px solid #f1f3f4; text-align: left; vertical-align: middle; }
+        tr:hover { background: #f8f9fa; }
+        td a { color: #1a73e8; text-decoration: none; word-break: break-all; }
+        
+        /* NEW: Image Preview Styling */
+        .url-cell { display: flex; align-items: center; gap: 15px; }
+        .img-preview { width: 45px; height: 45px; object-fit: cover; border-radius: 6px; border: 1px solid #dadce0; background: #f1f3f4; }
+
+        .badge { padding: 6px 14px; border-radius: 16px; font-size: 13px; font-weight: 500; display: inline-block; }
+        .badge.ok { background: #e6f4ea; color: #137333; }
+        .badge.warning { background: #fef7e0; color: #b06000; }
+        .badge.error { background: #fce8e6; color: #c5221f; }
+        #scan-status { text-align: center; font-weight: 500; color: #1976d2; margin-bottom: 20px; display: none; }
+
+        @media (max-width: 768px) {
+            .scan-form { flex-direction: column; }
+            .scan-form input[type="number"] { width: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>Live Website Checker</h1>
+        <p>Real-time asset & status monitoring</p>
+    </header>
+
+    <div class="container">
+        <form class="scan-form" id="scanForm">
+            <input type="url" name="url" placeholder="https://example.com" required>
+            <!-- <input type="number" name="max_pages" placeholder="Max Pages" value="20" min="0" title="Set to 0 to scan everything"> -->
+            <button type="submit">Scan Live</button>
+        </form>
+
+        <div id="scan-status">Scanning in progress... Check your server terminal!</div>
+
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-label">Total Scanned</div>
+                <div class="stat-value" id="val-total">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Pages Checked</div>
+                <div class="stat-value" id="val-pages">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Images Found</div>
+                <div class="stat-value" id="val-images">0</div>
+            </div>
+            <div class="stat-card error-card">
+                <div class="stat-label">Broken / Errors</div>
+                <div class="stat-value" id="val-errors" style="color: #c5221f;">0</div>
+            </div>
+        </div>
+
+        <div class="table-container" id="tableContainer">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 100px;">Type</th>
+                        <th>Asset URL</th>
+                        <th style="width: 120px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="results"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        const socket = io();
+        const resultsTable = document.getElementById("results");
+        const scanForm = document.getElementById("scanForm");
+        const scanStatus = document.getElementById("scan-status");
+        const statsGrid = document.getElementById("statsGrid");
+        const tableContainer = document.getElementById("tableContainer");
+
+        // Stat Counters
+        let stats = { total: 0, pages: 0, images: 0, errors: 0 };
+
+        scanForm.addEventListener('submit', (e) => {
+            e.preventDefault(); 
+            
+            // Reset UI and Stats on new scan
+            resultsTable.innerHTML = ''; 
+            stats = { total: 0, pages: 0, images: 0, errors: 0 };
+            updateStatsUI();
+
+            scanStatus.style.display = 'block';
+            statsGrid.style.display = 'grid';
+            tableContainer.style.display = 'block';
+            
+            socket.emit('start_scan', { 
+                url: document.querySelector('input[name="url"]').value,
+            });
+        });
+
+        // Update the numbers in the HTML
+        function updateStatsUI() {
+            document.getElementById('val-total').innerText = stats.total;
+            document.getElementById('val-pages').innerText = stats.pages;
+            document.getElementById('val-images').innerText = stats.images;
+            document.getElementById('val-errors').innerText = stats.errors;
+        }
+
+        socket.on("update", function(data) {
+            let badgeClass = 'warning';
+            let statusStr = String(data.status).toLowerCase();
+            
+            if (statusStr.includes('200') || statusStr.includes('ok')) {
+                badgeClass = 'ok';
+            } else if (statusStr.includes('4') || statusStr.includes('5') || statusStr.includes('fail') || statusStr.includes('error')) {
+                badgeClass = 'error';
+                stats.errors++; // Count the error
+            }
+
+            // Update real-time counts based on type
+            stats.total++;
+            if (data.type === 'PAGE') stats.pages++;
+            if (data.type === 'IMAGE') stats.images++;
+            updateStatsUI();
+
+            // Format how the URL cell looks (Injecting Image preview if it's an image)
+            let urlCellContent = `<a href="${data.url}" target="_blank">${data.url}</a>`;
+            
+            if (data.type === 'IMAGE') {
+                // Creates a flexbox layout with a small image thumbnail next to the link
+                // onerror prevents broken image icons if the link is totally dead
+                urlCellContent = `
+                    <div class="url-cell">
+                        <img src="${data.url}" class="img-preview" onerror="this.style.display='none'" loading="lazy">
+                        <a href="${data.url}" target="_blank">${data.url}</a>
+                    </div>
+                `;
+            }
+
+            const row = `<tr>
+                <td><strong>${data.type}</strong></td>
+                <td>${urlCellContent}</td>
+                <td><span class="badge ${badgeClass}">${data.status}</span></td>
+            </tr>`;
+            
+            // Insert at the top of the table instead of the bottom so you see new data immediately
+            resultsTable.insertAdjacentHTML('afterbegin', row); 
+        });
+
+        socket.on("done", function() {
+            scanStatus.style.display = 'none';
+            scanStatus.innerText = "Scanning in progress... Check your server terminal!"; // reset text
+        });
+    </script>
+</body>
+</html>
