@@ -1,6 +1,6 @@
 # 🚀 Live Website Health Checker
 
-![System Health Scanner](./templates/banner.png)
+![System Health Scanner](./templates/images/banner.png)
 > *A real-time, asynchronous website crawler and asset telemetry monitor built with Python, Flask, and WebSockets.*
 
 The **Live Website Health Checker** is a high-performance tool designed to crawl webpages, extract internal links and images, and validate their HTTP status codes in real-time. Featuring a sleek, dark-mode glassmorphism UI, it streams results live to the browser as the backend server processes them concurrently.
@@ -20,11 +20,11 @@ The **Live Website Health Checker** is a high-performance tool designed to crawl
 ## 📸 Screenshots
 
 ### Active Scanning Interface
-![Scanning in Progress](assets/scan.png)
+![Scanning in Progress](./templates/images/scan.png)
 *Real-time data streaming with animated DOM interception and live status badges.*
 
 ### Critical Error Filtering
-![Error Filtering](assets/export.png)
+![Error Filtering](./templates/images/export.png)
 *Isolate broken links and export directly to CSV for quick debugging.*
 
 ---
@@ -50,3 +50,4 @@ The **Live Website Health Checker** is a high-performance tool designed to crawl
 ```bash
 git clone [https://github.com/yourusername/live-website-checker.git](https://github.com/yourusername/live-website-checker.git)
 cd live-website-checker
+python main.py
