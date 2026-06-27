@@ -26,28 +26,30 @@ def is_image_url(url):
 def check_url(url):
     """Validates URL status codes masquerading as a real browser."""
     
-    # 1. Clean the URL (remove trailing spaces, hidden line breaks)
+    # 1. Clean the URL (remove trailing spaces)
     url = url.strip()
     
-    # 2. Encode special characters (like spaces) the way a real browser would
-    # This safely encodes the path while leaving the http:// domain intact
+    # 2. FIX: Encode special characters but KEEP slashes intact (safe="/%")
     parsed = urllib.parse.urlparse(url)
-    clean_path = urllib.parse.quote(parsed.path)
+    clean_path = urllib.parse.quote(parsed.path, safe="/%")
     url = parsed._replace(path=clean_path).geturl()
 
+    # 3. Enhanced headers specifically for strict sites like Facebook/LinkedIn
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
         'Accept-Language': 'en-US,en;q=0.9',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1'
     }
     
     try:
-        response = requests.head(url, headers=headers, timeout=5, allow_redirects=True)
+        # Pinging strict social media sites with HEAD usually triggers a block.
+        # But we will try it, and fallback to GET if they complain.
+        response = requests.head(url, headers=headers, timeout=8, allow_redirects=True)
         
-        # 3. ADDED 400 to the fallback list. 
-        # If the server rejects the HEAD request with 405, 403, or 400, try a standard GET
-        if response.status_code in [405, 403, 400]:
-            response = requests.get(url, headers=headers, timeout=5, allow_redirects=True, stream=True)
+        if response.status_code in [405, 403, 400, 401]:
+            response = requests.get(url, headers=headers, timeout=8, allow_redirects=True, stream=True)
             
         return response.status_code
     except requests.exceptions.RequestException:

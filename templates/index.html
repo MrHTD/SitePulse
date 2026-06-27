@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Website Health Checker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@500;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -20,15 +23,15 @@
             --danger: #ef4444;
         }
 
-        body { 
-            background-color: var(--bg-color); 
-            background-image: 
+        body {
+            background-color: var(--bg-color);
+            background-image:
                 radial-gradient(circle at 15% 50%, rgba(0, 242, 254, 0.08), transparent 25%),
                 radial-gradient(circle at 85% 30%, rgba(79, 172, 254, 0.08), transparent 25%);
-            font-family: 'Inter', sans-serif; 
-            margin: 0; 
-            padding: 0; 
-            color: var(--text-main); 
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
             min-height: 100vh;
         }
 
@@ -42,17 +45,17 @@
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
 
-        .header { 
-            padding: 50px 20px 30px; 
-            text-align: center; 
+        .header {
+            padding: 50px 20px 30px;
+            text-align: center;
             position: relative;
         }
 
-        .header h1 { 
+        .header h1 {
             font-family: 'Orbitron', sans-serif;
-            margin: 0 0 10px 0; 
-            font-size: 38px; 
-            font-weight: 700; 
+            margin: 0 0 10px 0;
+            font-size: 38px;
+            font-weight: 700;
             letter-spacing: 1px;
             background: linear-gradient(to right, var(--primary), var(--secondary));
             -webkit-background-clip: text;
@@ -60,39 +63,39 @@
             text-shadow: 0 0 30px var(--primary-glow);
         }
 
-        .header p { 
-            margin: 0; 
-            font-size: 16px; 
+        .header p {
+            margin: 0;
+            font-size: 16px;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 2px;
         }
 
-        .container { 
-            width: 95%; 
-            max-width: 1100px; 
-            margin: 0 auto 50px auto; 
-            position: relative; 
-            z-index: 10; 
+        .container {
+            width: 95%;
+            max-width: 1100px;
+            margin: 0 auto 50px auto;
+            position: relative;
+            z-index: 10;
         }
 
         /* Form Styles */
-        .scan-form { 
-            display: flex; 
-            gap: 15px; 
-            margin-bottom: 30px; 
-            padding: 10px; 
+        .scan-form {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 10px;
         }
 
-        .scan-form input[type="url"] { 
-            flex: 1; 
-            padding: 18px 24px; 
+        .scan-form input[type="url"] {
+            flex: 1;
+            padding: 18px 24px;
             background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-color); 
-            border-radius: 8px; 
-            font-size: 16px; 
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
             color: #fff;
-            outline: none; 
+            outline: none;
             transition: all 0.3s ease;
             font-family: 'Inter', sans-serif;
         }
@@ -101,46 +104,46 @@
             color: #64748b;
         }
 
-        .scan-form input:focus { 
-            border-color: var(--primary); 
-            box-shadow: 0 0 15px var(--primary-glow); 
+        .scan-form input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px var(--primary-glow);
             background: rgba(0, 0, 0, 0.4);
         }
 
-        .scan-form button { 
-            padding: 0 40px; 
-            border: none; 
-            border-radius: 8px; 
-            background: linear-gradient(135deg, var(--primary), var(--secondary)); 
-            color: #000; 
+        .scan-form button {
+            padding: 0 40px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #000;
             font-family: 'Orbitron', sans-serif;
-            font-size: 15px; 
-            font-weight: 700; 
-            text-transform: uppercase; 
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
             letter-spacing: 1px;
-            cursor: pointer; 
-            transition: all 0.3s; 
+            cursor: pointer;
+            transition: all 0.3s;
             box-shadow: 0 0 15px var(--primary-glow);
         }
 
-        .scan-form button:hover { 
+        .scan-form button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 25px var(--primary-glow); 
+            box-shadow: 0 0 25px var(--primary-glow);
             filter: brightness(1.2);
         }
 
         /* Stats Grid */
-        .stats-grid { 
-            display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
-            gap: 20px; 
-            margin-bottom: 30px; 
-            display: none; 
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            display: none;
         }
 
-        .stat-card { 
-            padding: 24px; 
-            text-align: center; 
+        .stat-card {
+            padding: 24px;
+            text-align: center;
             position: relative;
             overflow: hidden;
         }
@@ -148,7 +151,10 @@
         .stat-card::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; right: 0; height: 2px;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
             background: linear-gradient(90deg, transparent, var(--primary), transparent);
             opacity: 0.5;
         }
@@ -158,67 +164,70 @@
             opacity: 0.8;
         }
 
-        .stat-label { 
-            font-size: 12px; 
-            color: var(--text-muted); 
-            text-transform: uppercase; 
-            font-weight: 600; 
-            letter-spacing: 1px; 
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
         }
 
-        .stat-value { 
+        .stat-value {
             font-family: 'Orbitron', sans-serif;
-            font-size: 36px; 
-            font-weight: 700; 
-            color: #fff; 
-            margin-top: 10px; 
-            text-shadow: 0 0 10px rgba(255,255,255,0.2);
+            font-size: 36px;
+            font-weight: 700;
+            color: #fff;
+            margin-top: 10px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
         }
 
-        #val-errors { color: var(--danger); text-shadow: 0 0 15px rgba(239, 68, 68, 0.4); }
+        #val-errors {
+            color: var(--danger);
+            text-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        }
 
         /* Table Styles */
-        .table-container { 
-            display: none; 
+        .table-container {
+            display: block;
             overflow-x: auto;
         }
 
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        th { 
-            background: rgba(0, 0, 0, 0.2); 
-            color: var(--primary); 
+        th {
+            background: rgba(0, 0, 0, 0.2);
+            color: var(--primary);
             font-family: 'Orbitron', sans-serif;
-            font-weight: 500; 
-            text-transform: uppercase; 
-            font-size: 12px; 
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 12px;
             letter-spacing: 1px;
-            border-bottom: 1px solid var(--border-color); 
-            padding: 20px 24px; 
-            text-align: left; 
+            border-bottom: 1px solid var(--border-color);
+            padding: 20px 24px;
+            text-align: left;
         }
 
-        td { 
-            padding: 16px 24px; 
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03); 
-            text-align: left; 
-            vertical-align: middle; 
+        td {
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            text-align: left;
+            vertical-align: middle;
             color: var(--text-muted);
             transition: background 0.2s;
         }
 
-        tr:hover td { 
-            background: rgba(255, 255, 255, 0.02); 
+        tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
             color: var(--text-main);
         }
 
-        td a { 
-            color: var(--secondary); 
-            text-decoration: none; 
-            word-break: break-all; 
+        td a {
+            color: var(--secondary);
+            text-decoration: none;
+            word-break: break-all;
             transition: color 0.2s;
         }
 
@@ -226,109 +235,232 @@
             color: var(--primary);
             text-shadow: 0 0 8px var(--primary-glow);
         }
-        
-        .url-cell { display: flex; align-items: center; gap: 15px; }
-        .img-preview { 
-            width: 45px; 
-            height: 45px; 
-            object-fit: cover; 
-            border-radius: 6px; 
-            border: 1px solid var(--border-color); 
-            background: #000; 
+
+        .url-cell {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .img-preview {
+            width: 45px;
+            height: 45px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: #000;
         }
 
         /* Neon Badges */
-        .badge { 
-            padding: 6px 14px; 
-            border-radius: 20px; 
-            font-size: 12px; 
+        .badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
             font-family: 'Orbitron', sans-serif;
-            font-weight: 600; 
+            font-weight: 600;
             letter-spacing: 1px;
-            display: inline-block; 
+            display: inline-block;
             border: 1px solid transparent;
         }
 
-        .badge.ok { 
-            background: rgba(16, 185, 129, 0.1); 
-            color: var(--success); 
+        .badge.ok {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
             border-color: rgba(16, 185, 129, 0.3);
             box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
         }
-        .badge.warning { 
-            background: rgba(245, 158, 11, 0.1); 
-            color: var(--warning); 
+
+        .badge.warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
             border-color: rgba(245, 158, 11, 0.3);
             box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
         }
-        .badge.error { 
-            background: rgba(239, 68, 68, 0.1); 
-            color: var(--danger); 
+
+        .badge.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
             border-color: rgba(239, 68, 68, 0.3);
             box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
         }
 
-        /* Status & Filtering */
-        .status-bar-container { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            gap: 15px; 
-            margin-bottom: 30px; 
+/* Status & Filtering */
+        .status-bar-container {
+            display: flex;
+            flex-direction: column; /* Keeps the text above the buttons */
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
         }
 
-        #scan-status { 
-            text-align: center; 
+        .button-group {
+            display: flex;
+            flex-direction: row; /* Puts the buttons side-by-side */
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        #scan-status {
+            text-align: center;
             font-family: 'Orbitron', sans-serif;
-            font-weight: 500; 
-            color: var(--primary); 
-            display: none; 
+            font-weight: 500;
+            color: var(--primary);
+            display: none;
             text-shadow: 0 0 10px var(--primary-glow);
             animation: pulse 1.5s infinite;
         }
 
         @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; text-shadow: 0 0 20px var(--primary-glow); }
-            100% { opacity: 0.6; }
+            0% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+                text-shadow: 0 0 20px var(--primary-glow);
+            }
+
+            100% {
+                opacity: 0.6;
+            }
         }
 
-        .filter-btn { 
-            padding: 10px 24px; 
-            border: 1px solid var(--danger); 
-            border-radius: 20px; 
-            background: rgba(239, 68, 68, 0.05); 
-            color: var(--danger); 
+        .filter-btn {
+            padding: 10px 24px;
+            border: 1px solid var(--danger);
+            border-radius: 20px;
+            background: rgba(239, 68, 68, 0.05);
+            color: var(--danger);
             font-family: 'Inter', sans-serif;
-            font-size: 13px; 
-            font-weight: 600; 
+            font-size: 13px;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            cursor: pointer; 
-            transition: all 0.3s; 
-            display: none; 
+            cursor: pointer;
+            transition: all 0.3s;
+            display: none;
         }
 
-        .filter-btn:hover { 
-            background: rgba(239, 68, 68, 0.15); 
+        .filter-btn:hover {
+            background: rgba(239, 68, 68, 0.15);
             box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
         }
 
-        .filter-btn.active { 
-            background: var(--danger); 
-            color: #fff; 
+        .filter-btn.active {
+            background: var(--danger);
+            color: #fff;
             box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
         }
 
-        .filter-only-errors tr:not(.has-error) { display: none; }
+        .filter-only-errors tr:not(.has-error) {
+            display: none;
+        }
 
         @media (max-width: 768px) {
-            .scan-form { flex-direction: column; }
-            .scan-form button { padding: 18px; }
-            .header h1 { font-size: 28px; }
+            .scan-form {
+                flex-direction: column;
+            }
+
+            .scan-form button {
+                padding: 18px;
+            }
+
+            .header h1 {
+                font-size: 28px;
+            }
+        }
+
+        /* Custom Scrollbar for a sleek look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+            box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
+        }
+
+        @keyframes rowStreamIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-15px) scale(0.98);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        #results tr {
+            animation: rowStreamIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Make the table header sticky so it doesn't disappear when scrolling */
+        .table-container {
+            max-height: 700px;
+            overflow-y: auto;
+        }
+
+        th {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+            background: rgba(11, 15, 25, 0.9);
+            /* Matches background */
+        }
+
+        .progress-container {
+            width: 100%;
+            max-width: 100%;
+            /* Changed from 400px to 100% */
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin: 10px auto 25px auto;
+            /* Centers it and adds space before the cards */
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-bar {
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--primary), var(--secondary), transparent);
+            animation: scanRadar 1.5s infinite linear;
+        }
+
+        @keyframes scanRadar {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(200%);
+            }
         }
     </style>
 </head>
+
 <body>
 
     <header class="header">
@@ -342,9 +474,21 @@
             <button type="submit">Initialize Scan</button>
         </form>
 
-        <div class="status-bar-container">
+<div class="status-bar-container">
             <div id="scan-status">Establishing connection... Analyzing DOM elements...</div>
-            <button id="filterBtn" class="filter-btn">Filter Critical Errors</button>
+            
+            <!-- This new div groups the buttons together in one line -->
+            <div class="button-group">
+                <button id="filterBtn" class="filter-btn">Filter Critical Errors</button>
+                <button id="exportBtn" class="filter-btn export-btn"
+                    style="border-color: var(--primary); color: var(--primary);">
+                    Export to CSV
+                </button>
+            </div>
+        </div>
+
+        <div id="scan-progress" class="progress-container">
+            <div class="progress-bar"></div>
         </div>
 
         <div class="stats-grid" id="statsGrid">
@@ -375,7 +519,22 @@
                         <th style="width: 140px;">Status Code</th>
                     </tr>
                 </thead>
-                <tbody id="results"></tbody>
+                <tbody id="results">
+                    <tr id="empty-state">
+                        <td colspan="3" style="text-align: center; padding: 60px 20px; color: var(--text-muted);">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                                style="opacity: 0.5; margin-bottom: 15px;">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                <line x1="11" y1="8" x2="11" y2="14"></line>
+                                <line x1="8" y1="11" x2="14" y2="11"></line>
+                            </svg>
+                            <br>
+                            Awaiting target URL. Initialize scan to view telemetry data.
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
     </div>
@@ -390,12 +549,15 @@
         const statsGrid = document.getElementById("statsGrid");
         const tableContainer = document.getElementById("tableContainer");
         const filterBtn = document.getElementById("filterBtn");
+        const exportBtn = document.getElementById("exportBtn");
+        const scanProgress = document.getElementById("scan-progress");
 
         let stats = { total: 0, pages: 0, images: 0, errors: 0 };
 
         scanForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            
+
+            // Clear table (automatically removes the empty state)
             resultsTable.innerHTML = '';
             stats = { total: 0, pages: 0, images: 0, errors: 0 };
             updateStatsUI();
@@ -404,14 +566,17 @@
             resultsTable.classList.remove('filter-only-errors');
             filterBtn.classList.remove('active');
             filterBtn.innerText = "Filter Critical Errors";
+
+            // Show UI Elements
             filterBtn.style.display = 'inline-block';
+            exportBtn.style.display = 'inline-block'; // FIX: Make export button visible
+            scanProgress.style.display = 'block';     // Show the animated radar bar
 
             scanStatus.innerText = "Scanning in progress... Intercepting network requests!";
             scanStatus.style.display = 'block';
-            scanStatus.style.animation = 'pulse 1.5s infinite'; // Restore pulse animation
+            scanStatus.style.animation = 'pulse 1.5s infinite';
             statsGrid.style.display = 'grid';
-            tableContainer.style.display = 'block';
-            
+
             socket.emit('start_scan', {
                 url: document.querySelector('input[name="url"]').value
             });
@@ -431,11 +596,11 @@
             document.getElementById('val-errors').innerText = stats.errors;
         }
 
-        socket.on("update", function(data) {
+        socket.on("update", function (data) {
             let badgeClass = 'warning';
             let statusStr = String(data.status).toLowerCase();
             let isError = false;
-            
+
             if (statusStr === '200' || statusStr === 'ok' || statusStr.includes('200 ok')) {
                 badgeClass = 'ok';
             } else if (statusStr.startsWith('4') || statusStr.startsWith('5') || statusStr.includes('fail') || statusStr.includes('error')) {
@@ -458,7 +623,7 @@
 
             let isAnImage = (data.type === 'IMAGE' || data.type === 'IMAGE (via Link)');
             let urlCellContent = `<a href="${data.url}" target="_blank">${data.url}</a>`;
-            
+
             if (isAnImage) {
                 urlCellContent = `
                     <div class="url-cell">
@@ -474,16 +639,45 @@
                 <td>${urlCellContent}</td>
                 <td><span class="badge ${badgeClass}">${data.status}</span></td>
             </tr>`;
-            
+
             resultsTable.insertAdjacentHTML('afterbegin', row);
         });
 
-        socket.on("done", function() {
+        socket.on("done", function () {
             scanStatus.innerText = "Scan Completed Successfully.";
-            scanStatus.style.animation = 'none'; // Stop pulsing when done
+            scanStatus.style.animation = 'none';
             scanStatus.style.textShadow = 'none';
             scanStatus.style.color = 'var(--success)';
+
+            // FIX: Hide progress bar here, when the scan is actually done
+            scanProgress.style.display = 'none';
+        });
+
+        // CSV Export Logic
+        exportBtn.addEventListener("click", () => {
+            let csvContent = "data:text/csv;charset=utf-8,Type,Asset URL,Status\n";
+
+            const rows = document.querySelectorAll("#results tr");
+            rows.forEach(row => {
+                // FIX: Check Computed Style to see if the CSS class actually hid the row
+                if (window.getComputedStyle(row).display !== 'none') {
+                    let type = row.cells[0].innerText.trim();
+                    let url = row.cells[1].innerText.trim();
+                    let status = row.cells[2].innerText.trim();
+
+                    csvContent += `"${type}","${url}","${status}"\n`;
+                }
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "health_scan_report.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         });
     </script>
 </body>
+
 </html>
