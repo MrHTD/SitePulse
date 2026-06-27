@@ -542,7 +542,7 @@
     <!-- Keep your original Script exactly the same so Socket functionality doesn't break -->
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <script>
-        const socket = io();
+        const socket = io({ transports: ['polling'] });
         const resultsTable = document.getElementById("results");
         const scanForm = document.getElementById("scanForm");
         const scanStatus = document.getElementById("scan-status");

@@ -48,6 +48,10 @@ The **Live Website Health Checker** is a high-performance tool designed to crawl
 
 ### 1. Clone the repository
 ```bash
-git clone [https://github.com/yourusername/live-website-checker.git](https://github.com/yourusername/live-website-checker.git)
+git clone [https://github.com/MrHTD/SitePulse.git](https://github.com/MrHTD/SitePulse.git)
+
 cd live-website-checker
+
+pip install -r requirements.txt
+
 python main.py

@@ -7,11 +7,13 @@ from urllib.parse import urljoin, urlparse
 from concurrent.futures import ThreadPoolExecutor
 import requests, urllib.parse
 import os
+from gevent.pywsgi import WSGIServer
+from geventwebsocket.handler import WebSocketHandler
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key'
 
-socketio = SocketIO(app, async_mode='threading', cors_allowed_origins="*")
+socketio = SocketIO(app, async_mode='gevent', cors_allowed_origins="*")
 
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.bmp', '.ico'}
 
@@ -202,5 +204,12 @@ def handle_scan(data):
     print(f"[SYSTEM] Received request to scan: {target_url}")
     socketio.start_background_task(background_crawler, target_url)
 
+# if __name__ == "__main__":
+#     socketio.run(app, debug=True)
+
 if __name__ == "__main__":
-    socketio.run(app, debug=True)
+    print("[SYSTEM] Starting production server on http://127.0.0.1:5000 (Gevent)")
+    
+    # 2. Run the high-performance Gevent server with WebSocket support
+    http_server = WSGIServer(('0.0.0.0', 5000), app, handler_class=WebSocketHandler)
+    http_server.serve_forever()
