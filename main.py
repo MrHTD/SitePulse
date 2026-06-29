@@ -208,8 +208,14 @@ def handle_scan(data):
 #     socketio.run(app, debug=True)
 
 if __name__ == "__main__":
-    print("[SYSTEM] Starting production server on http://127.0.0.1:5000 (Gevent)")
-    
-    # 2. Run the high-performance Gevent server with WebSocket support
-    http_server = WSGIServer(('0.0.0.0', 5000), app, handler_class=WebSocketHandler)
+    print("[SYSTEM] Starting server")
+
+    port = int(os.environ.get("PORT", 5000))
+
+    http_server = WSGIServer(
+        ("0.0.0.0", port),
+        app,
+        handler_class=WebSocketHandler
+    )
+
     http_server.serve_forever()
